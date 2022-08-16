@@ -11,48 +11,13 @@ public class TicTacToe {
 
     public static void main(String[] args) {
         System.out.println("This is Tic Tac Toe,  enjoy!");
-
-        char[][] gameBoard = { { ' ', '|', ' ', '|', ' ' },
-                { '-', '+', '-', '+', '-' },
-                { ' ', '|', ' ', '|', ' ' },
-                { '-', '+', ' ', '+', '-' },
-                { ' ', '|', ' ', '|', ' ' } };
-
-        printGameBoard(gameBoard);
-
         while (true) {
-            Scanner scan = new Scanner(System.in);
-            System.out.println("Enter your spot (1-9):");
-            int playerPos = scan.nextInt();
-            while (playerPositions.contains(playerPos) || cpuPositions.contains(playerPos)) {
-                System.out.println("Position taken! Enter empty position.");
-                playerPos = scan.nextInt();
-            }
+            playerPositions.clear();
+            cpuPositions.clear();
 
-            chooseSpot(gameBoard, playerPos, "Player");
-            String result = checkWinner(gameBoard);
-            if (result.length() > 0) {
-                System.out.println(result);
-                break;
-            }
-
-            Random randomCPU = new Random();
-            int cpuPos = randomCPU.nextInt(9) + 1;
-            while (playerPositions.contains(cpuPos) || cpuPositions.contains(cpuPos)) {
-                cpuPos = scan.nextInt(9) + 1;
-            }
-            chooseSpot(gameBoard, cpuPos, "CPU");
-
-            printGameBoard(gameBoard);
-
-            result = checkWinner(gameBoard);
-            if (result.length() > 0) {
-                System.out.println(result);
-                break;
-            }
-
+            oneFullGame();
+            System.out.println("New Game!");
         }
-
     }
 
     public static void printGameBoard(char[][] gameBoard) {
@@ -104,9 +69,9 @@ public class TicTacToe {
             case 9:
                 gameBoard[4][4] = symbol;
                 break;
+            default:
+                break;
         }
-
-        // printGameBoard(gameBoard);
 
     }
 
@@ -148,4 +113,51 @@ public class TicTacToe {
         return "";
 
     }
+
+
+    public static void oneFullGame() {
+        char[][] gameBoard = { { ' ', '|', ' ', '|', ' ' },
+                { '-', '+', '-', '+', '-' },
+                { ' ', '|', ' ', '|', ' ' },
+                { '-', '+', ' ', '+', '-' },
+                { ' ', '|', ' ', '|', ' ' } };
+
+        printGameBoard(gameBoard);
+
+        while (true) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter your spot (1-9):");
+            int playerPos = scan.nextInt();
+            while (playerPositions.contains(playerPos) || cpuPositions.contains(playerPos)) {
+                System.out.println("Position taken! Enter empty position.");
+                playerPos = scan.nextInt();
+            }
+
+            chooseSpot(gameBoard, playerPos, "Player");
+            String result = checkWinner(gameBoard);
+            if (result.length() > 0) {
+               System.out.println(result);
+                break;
+            }
+
+            Random randomCPU = new Random();
+            int cpuPos = randomCPU.nextInt(9) + 1;
+            while (playerPositions.contains(cpuPos) || cpuPositions.contains(cpuPos)) {
+                cpuPos = scan.nextInt(9) + 1;
+            }
+            chooseSpot(gameBoard, cpuPos, "CPU");
+
+            printGameBoard(gameBoard);
+
+            result = checkWinner(gameBoard);
+
+            if (result.length() > 0) {
+                System.out.println(result);
+                break;
+            }
+
+        }
+        
+    }
+
 }
