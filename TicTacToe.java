@@ -11,12 +11,27 @@ public class TicTacToe {
 
     public static void main(String[] args) {
         System.out.println("This is Tic Tac Toe,  enjoy!");
+        int p = 0;
+        int c = 0;
+
+        Scanner scan = new Scanner(System.in);
+
         while (true) {
             playerPositions.clear();
             cpuPositions.clear();
 
-            oneFullGame();
+            String victor = oneFullGame(scan);
+            if (victor == "player") {
+                p++;
+                System.out.println("Congrats, you won!");
+            } else if (victor == "cpu") {
+                c++;
+                System.out.println("CPU won!");
+            }
+            System.out.println("Player's score: " + p);
+            System.out.println("CPU's score: " + c);
             System.out.println("New Game!");
+
         }
     }
 
@@ -98,14 +113,14 @@ public class TicTacToe {
         for (List v : winning) {
             if (playerPositions.containsAll(v)) {
                 printGameBoard(gameBoard);
-                return "Congrats, you won!";
+                return "player";
             }
             if (cpuPositions.containsAll(v)) {
                 printGameBoard(gameBoard);
-                return "CPU wins!";
+                return "cpu";
             } else if (playerPositions.size() + cpuPositions.size() == 9) {
                 printGameBoard(gameBoard);
-                return "Draw!";
+                return "draw";
             }
 
         }
@@ -114,50 +129,55 @@ public class TicTacToe {
 
     }
 
-
-    public static void oneFullGame() {
+    public static String oneFullGame(Scanner scan) {
         char[][] gameBoard = { { ' ', '|', ' ', '|', ' ' },
                 { '-', '+', '-', '+', '-' },
                 { ' ', '|', ' ', '|', ' ' },
-                { '-', '+', ' ', '+', '-' },
+                { '-', '+', '-', '+', '-' },
                 { ' ', '|', ' ', '|', ' ' } };
 
         printGameBoard(gameBoard);
+        // One TicTacToe Game
 
         while (true) {
-            Scanner scan = new Scanner(System.in);
+
             System.out.println("Enter your spot (1-9):");
+            // Checking if spot is taken
             int playerPos = scan.nextInt();
             while (playerPositions.contains(playerPos) || cpuPositions.contains(playerPos)) {
                 System.out.println("Position taken! Enter empty position.");
                 playerPos = scan.nextInt();
             }
 
+            // Marking the board
             chooseSpot(gameBoard, playerPos, "Player");
+            // Checking who won
             String result = checkWinner(gameBoard);
             if (result.length() > 0) {
-               System.out.println(result);
-                break;
+                return result;
             }
 
+            // Generating CPI input
             Random randomCPU = new Random();
+            // Setting bounds for CPU input
             int cpuPos = randomCPU.nextInt(9) + 1;
+            // Checking if spot is taken for CPU
             while (playerPositions.contains(cpuPos) || cpuPositions.contains(cpuPos)) {
-                cpuPos = scan.nextInt(9) + 1;
+                cpuPos = randomCPU.nextInt(9) + 1;
             }
             chooseSpot(gameBoard, cpuPos, "CPU");
 
             printGameBoard(gameBoard);
 
+            // Checking who won
             result = checkWinner(gameBoard);
-
             if (result.length() > 0) {
-                System.out.println(result);
-                break;
+                return result;
+
             }
 
         }
-        
+
     }
 
 }
